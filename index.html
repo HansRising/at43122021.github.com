@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/TarifaAT4303122021_1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:2
+        }).fitBounds([[-35.301189472981086,-73.28847982239279],[-32.89784019553047,-69.50416782818263]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleSatellite_0');
+        map.getPane('pane_GoogleSatellite_0').style.zIndex = 400;
+        var layer_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellite_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 2,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleSatellite_0;
+        map.addLayer(layer_GoogleSatellite_0);
+        function pop_TarifaAT4303122021_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Región: </th>\
+                        <td>' + (feature.properties['Región: '] !== null ? autolinker.link(feature.properties['Región: '].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Comuna: </th>\
+                        <td>' + (feature.properties['Comuna: '] !== null ? autolinker.link(feature.properties['Comuna: '].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Radiación Anual </th>\
+                        <td>' + (feature.properties['Radiación Anual '] !== null ? autolinker.link(feature.properties['Radiación Anual '].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Distribuidora</th>\
+                        <td>' + (feature.properties['Distribuidora'] !== null ? autolinker.link(feature.properties['Distribuidora'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Cantidad Clientes AT4.3: </th>\
+                        <td>' + (feature.properties['Cantidad Clientes AT4.3: '] !== null ? autolinker.link(feature.properties['Cantidad Clientes AT4.3: '].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">kWp Promedio 4.3 por cliente: </th>\
+                        <td>' + (feature.properties['kWp Promedio 4.3 por cliente: '] !== null ? autolinker.link(feature.properties['kWp Promedio 4.3 por cliente: '].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">kWp total 4.3: </th>\
+                        <td>' + (feature.properties['kWp total 4.3: '] !== null ? autolinker.link(feature.properties['kWp total 4.3: '].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_TarifaAT4303122021_1_0(feature) {
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 0.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 10.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(43,131,186,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 10.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 20.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(96,169,177,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 20.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 30.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(150,206,168,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 30.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 40.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(192,230,171,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 40.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 50.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,244,182,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 50.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 60.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,252,187,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 60.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 80.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,235,168,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 80.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 100.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,218,148,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 100.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 120.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,201,128,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 120.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 140.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,184,109,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 140.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 160.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,170,95,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 160.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 180.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,160,90,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 180.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 200.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,149,85,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 200.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 220.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,139,81,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 220.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 240.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(242,128,76,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 240.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 260.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(239,118,71,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 260.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 280.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,108,66,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 280.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 300.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,97,61,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 300.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 320.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(231,87,56,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 320.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 340.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,77,52,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 340.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 360.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,66,47,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 360.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 400.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(223,56,42,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 400.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 450.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,45,37,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 450.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 500.000000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(218,35,32,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['kWp Promedio 4.3 por cliente: '] >= 500.000000 && feature.properties['kWp Promedio 4.3 por cliente: '] <= 1152.900000 ) {
+                return {
+                pane: 'pane_TarifaAT4303122021_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_TarifaAT4303122021_1');
+        map.getPane('pane_TarifaAT4303122021_1').style.zIndex = 401;
+        map.getPane('pane_TarifaAT4303122021_1').style['mix-blend-mode'] = 'normal';
+        var layer_TarifaAT4303122021_1 = new L.geoJson(json_TarifaAT4303122021_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TarifaAT4303122021_1',
+            layerName: 'layer_TarifaAT4303122021_1',
+            pane: 'pane_TarifaAT4303122021_1',
+            onEachFeature: pop_TarifaAT4303122021_1,
+            style: style_TarifaAT4303122021_1_0,
+        });
+        bounds_group.addLayer(layer_TarifaAT4303122021_1);
+        map.addLayer(layer_TarifaAT4303122021_1);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Tarifa AT4.3 03-12-2021<br /><table><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_0100.png" /></td><td>0 - 10</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_10201.png" /></td><td>10 - 20</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_20302.png" /></td><td>20 - 30</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_30403.png" /></td><td>30 - 40</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_40504.png" /></td><td>40 - 50</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_50605.png" /></td><td>50 - 60</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_60806.png" /></td><td>60 - 80</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_801007.png" /></td><td>80 - 100</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_1001208.png" /></td><td>100 - 120</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_1201409.png" /></td><td>120 - 140</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_14016010.png" /></td><td>140 - 160</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_16018011.png" /></td><td>160 - 180</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_18020012.png" /></td><td>180 - 200</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_20022013.png" /></td><td>200 - 220</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_22024014.png" /></td><td>220 - 240</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_24026015.png" /></td><td>240 - 260</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_26028016.png" /></td><td>260 - 280</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_28030017.png" /></td><td>280 - 300</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_30032018.png" /></td><td>300 - 320</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_32034019.png" /></td><td>320 - 340</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_34036020.png" /></td><td>340 - 360</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_36040021.png" /></td><td>360 - 400</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_40045022.png" /></td><td>400 - 450</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_45050023.png" /></td><td>450 - 500</td></tr><tr><td style="text-align: center;"><img src="legend/TarifaAT4303122021_1_5001152924.png" /></td><td>500 - 1152,9</td></tr></table>': layer_TarifaAT4303122021_1,"Google Satellite": layer_GoogleSatellite_0,},{collapsed:false}).addTo(map);
+        map.on("zoomend", function(){
+
+                if (map.hasLayer(layer_TarifaAT4303122021_1)) {
+                    if (map.getZoom() <= 9 && map.getZoom() >= 19) {
+                        layer_TarifaAT4303122021_1.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_TarifaAT4303122021_1.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+        });
+        setBounds();
+        var i = 0;
+        layer_TarifaAT4303122021_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Comuna: '] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['Comuna: ']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_TarifaAT4303122021_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+                if (map.hasLayer(layer_TarifaAT4303122021_1)) {
+                    if (map.getZoom() <= 9 && map.getZoom() >= 19) {
+                        layer_TarifaAT4303122021_1.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_TarifaAT4303122021_1.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+        resetLabels([layer_TarifaAT4303122021_1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_TarifaAT4303122021_1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_TarifaAT4303122021_1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_TarifaAT4303122021_1]);
+        });
+        </script>
+    </body>
+</html>
